@@ -1,6 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNoteStore } from "../../../store/useNoteStore";
 
 export const useSaveNoteMutation = () => {
+  const { setSelectedNote } = useNoteStore();
+  const queryClient = useQueryClient();
   const saveNoteMutation = useMutation({
     mutationFn: async (data) => {
       const { _id = null, title, content, tags } = data;
@@ -23,6 +26,25 @@ export const useSaveNoteMutation = () => {
         throw new Error("Save note failed");
       }
       return response.json();
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["notes"], (oldData) => {
+        if (!oldData) return [data];
+        const existingNoteIndex = oldData.findIndex(
+          (note) => note._id === data._id
+        );
+        if (existingNoteIndex !== -1) {
+          const updatedNotes = [...oldData];
+          updatedNotes[existingNoteIndex] = data;
+          updatedNotes.sort(
+            (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+          );
+          return updatedNotes;
+        } else {
+          return [data, ...oldData];
+        }
+      });
+      setSelectedNote(data);
     },
   });
 

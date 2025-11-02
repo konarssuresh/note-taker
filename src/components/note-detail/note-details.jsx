@@ -123,7 +123,7 @@ const NoteDetails = () => {
         render={({ field: { value, onBlur, onChange } }) => {
           return (
             <Editor
-              className="flex-grow"
+              className="flex-grow md:max-h-[62.5vh] overflow-y-auto"
               value={value}
               onChange={onChange}
               onBlur={onBlur}

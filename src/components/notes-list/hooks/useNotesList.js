@@ -11,7 +11,9 @@ export const useNotesListQuery = () => {
       if (!response.ok) {
         throw new Error("Failed to fetch notes");
       }
-      return response.json();
+      const data = await response.json();
+
+      return data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
     },
   });
 

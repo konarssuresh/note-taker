@@ -1,9 +1,7 @@
-import React from "react";
-
-const IconDelete = ({ size = 24, color = "#0E121B", ...props }) => (
+const IconDelete = ({ size = 24, ...props }) => (
   <svg width={size} height={size} fill="none" viewBox="0 0 24 25" {...props}>
     <path
-      stroke={color}
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"

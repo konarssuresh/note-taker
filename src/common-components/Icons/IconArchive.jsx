@@ -1,5 +1,3 @@
-import React from "react";
-
 const IconArchive = ({ size = 24, ...props }) => (
   <svg width={size} height={size} fill="none" viewBox="0 0 24 24" {...props}>
     <path
