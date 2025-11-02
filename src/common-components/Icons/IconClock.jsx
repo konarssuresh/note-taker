@@ -1,7 +1,13 @@
 import React from "react";
 
 const IconClock = ({ size = 24, color = "#2B303B", ...props }) => (
-  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" {...props}>
+  <svg
+    width={size}
+    height={size}
+    fill="currentColor"
+    viewBox="0 0 24 24"
+    {...props}
+  >
     <path
       fillRule="evenodd"
       clipRule="evenodd"

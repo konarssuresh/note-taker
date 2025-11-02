@@ -1,4 +1,5 @@
 import NotesList from "../../components/notes-list/notes-list.jsx";
+import NoteDetails from "../../components/note-detail/note-details.jsx";
 
 const Notes = () => {
   return (
@@ -7,9 +8,13 @@ const Notes = () => {
         <h3 className="text-preset-1">All Notes</h3>
       </section>
       <section className="flex flex-row flex-grow">
-        <div className="md:w-72.5 border-r border-neutral-200">
+        <div className="md:w-72.5">
           <NotesList />
         </div>
+        <div className="border-r border-l border-neutral-200 flex-grow">
+          <NoteDetails />
+        </div>
+        <div className="md:w-60">dwdwd</div>
       </section>
     </div>
   );
