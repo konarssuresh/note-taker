@@ -1,13 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 
-export const useNotesListQuery = () => {
+export const useNotesListQuery = ({ isArchieved } = {}) => {
   const queryData = useQuery({
-    queryKey: ["notes"],
+    queryKey: ["notes", isArchieved ? "archived" : "active"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:8000/notes/active", {
-        method: "GET",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `http://localhost:8000/notes/${isArchieved ? "archieved" : "active"}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch notes");
       }

@@ -16,12 +16,8 @@ export const useArchiveNoteMutation = () => {
       }
       return response.json();
     },
-    onSuccess: (data) => {
-      queryClient.setQueryData(["notes"], (oldData) => {
-        if (!oldData) return [];
-        return oldData.filter((note) => note._id !== data._id);
-      });
-
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes", "active"] });
       queryClient.invalidateQueries({ queryKey: ["notes", "archived"] });
     },
   });

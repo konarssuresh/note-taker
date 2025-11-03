@@ -1,5 +1,6 @@
 import { useNoteStore } from "../../store/useNoteStore";
 import { useArchiveNoteMutation } from "./hooks/useArchieveNoteMutation";
+import { useDeleteNoteMutation } from "./hooks/useDeleteNoteMutation";
 import { Button } from "../../common-components/button";
 import IconArchive from "../../common-components/Icons/IconArchive";
 import IconDelete from "../../common-components/Icons/IconDelete";
@@ -9,6 +10,7 @@ import { showDialog } from "../../common-components/dialog-container";
 const NoteActions = () => {
   const { selectedNote, setSelectedNote } = useNoteStore();
   const { mutate: archieveNote } = useArchiveNoteMutation();
+  const { mutate: deleteNote } = useDeleteNoteMutation();
 
   if (!selectedNote) {
     return null;
@@ -28,10 +30,13 @@ const NoteActions = () => {
           },
           {
             variant: "primary",
-            text: "Archieve Note",
+            text: `${selectedNote.status === "active" ? "Archive" : "Unarchive"} Note`,
             onClick: () => {
               archieveNote(
-                { noteId: selectedNote._id, shouldArchieve: true },
+                {
+                  noteId: selectedNote._id,
+                  shouldArchieve: selectedNote.status === "active",
+                },
                 {
                   onSuccess: () => {
                     setSelectedNote(null);
@@ -43,11 +48,13 @@ const NoteActions = () => {
           },
         ]}
         icon={<IconArchive size={24} />}
-        title="Archieve Note"
+        title={`${selectedNote.status === "active" ? "Archive" : "Unarchive"} Note`}
         onClose={() => closeDialog()}
       >
-        Are you sure you want to archive this note? You can find it in the
-        Archived Notes section and restore it anytime.
+        Are you sure you want to{" "}
+        {`${selectedNote.status === "active" ? "Archive" : "Unarchive"}`} this
+        note? You can find it in the Archived Notes section and restore it
+        anytime.
       </ModalDialog>
     );
   };
@@ -68,7 +75,20 @@ const NoteActions = () => {
             variant: "danger",
             text: "Delete Note",
             onClick: () => {
-              console.log("delete button is clicked");
+              deleteNote(
+                {
+                  noteId: selectedNote._id,
+                },
+                {
+                  onSuccess: () => {
+                    setSelectedNote(null);
+                    closeDialog();
+                  },
+                  onError: (error) => {
+                    console.error("Error deleting note:", error);
+                  },
+                }
+              );
             },
           },
         ]}
@@ -91,7 +111,7 @@ const NoteActions = () => {
           onClick={handleArchieve}
         >
           <IconArchive size={16} />
-          Archieve Note
+          {selectedNote?.status === "archieved" ? "Unarchive" : "Archive"} Note
         </Button>
         <Button
           variant="border"

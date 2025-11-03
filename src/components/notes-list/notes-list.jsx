@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import dayjs from "dayjs";
 import { useNotesListQuery } from "./hooks/useNotesList";
-import { useNoteStore } from "../../store/useNoteStore";
+import { useNoteStore, MENU_NAMES } from "../../store/useNoteStore";
 import { Button } from "../../common-components/button";
 import IconPlus from "../../common-components/Icons/IconPlus";
 
@@ -41,8 +41,14 @@ const Note = ({ note = {} }) => {
 };
 
 const NotesList = ({ selectedTag = "" }) => {
-  const { data = [], isLoading, isError } = useNotesListQuery();
-  const { setIsCreateNote } = useNoteStore();
+  const { setIsCreateNote, selectedMenu } = useNoteStore();
+  const {
+    data = [],
+    isLoading,
+    isError,
+  } = useNotesListQuery({
+    isArchieved: selectedMenu === MENU_NAMES.ARCHIEVED_NOTES,
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -56,9 +62,21 @@ const NotesList = ({ selectedTag = "" }) => {
   }
   if (!isLoading && data.length === 0) {
     return (
-      <div className="text-preset-5 bg-neutral-100 p-2 rounded-md">
-        You don’t have any notes yet. Start a new note to capture your thoughts
-        and ideas.
+      <div className="flex flex-col gap-4 md:p-4">
+        {selectedMenu !== MENU_NAMES.ARCHIEVED_NOTES && (
+          <Button
+            vatiant="primary"
+            className="hidden md:flex md:flex-row md:gap-2  md:visible"
+            onClick={() => setIsCreateNote(true)}
+          >
+            <IconPlus size={16} />
+            <span className="text-preset-4">Create New Note</span>
+          </Button>
+        )}
+        <div className="text-preset-5 bg-neutral-100 p-2 rounded-md">
+          You don’t have any notes yet. Start a new note to capture your
+          thoughts and ideas.
+        </div>
       </div>
     );
   }
