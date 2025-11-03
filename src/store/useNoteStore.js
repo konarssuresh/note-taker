@@ -12,4 +12,6 @@ export const useNoteStore = create((set) => ({
   selectedMenu: MENU_NAMES.ALL_NOTES,
   setSelectedMenu: (menuName) =>
     set({ selectedNote: null, isCreateNote: false, selectedMenu: menuName }),
+  selectedTag: null,
+  setSelectedTag: (tag) => set({ selectedTag: tag }),
 }));

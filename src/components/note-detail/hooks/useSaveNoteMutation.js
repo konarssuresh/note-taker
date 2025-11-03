@@ -28,7 +28,7 @@ export const useSaveNoteMutation = () => {
       return response.json();
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(["notes"], (oldData) => {
+      queryClient.setQueryData(["notes", "active"], (oldData) => {
         if (!oldData) return [data];
         const existingNoteIndex = oldData.findIndex(
           (note) => note._id === data._id

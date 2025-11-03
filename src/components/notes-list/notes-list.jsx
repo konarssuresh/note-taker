@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
 import dayjs from "dayjs";
 import { useNotesListQuery } from "./hooks/useNotesList";
 import { useNoteStore, MENU_NAMES } from "../../store/useNoteStore";
@@ -50,6 +50,13 @@ const NotesList = ({ selectedTag = "" }) => {
     isArchieved: selectedMenu === MENU_NAMES.ARCHIEVED_NOTES,
   });
 
+  const displayData = useMemo(() => {
+    if (selectedTag && selectedMenu === MENU_NAMES.ALL_NOTES) {
+      return data.filter((note) => note.tags.includes(selectedTag));
+    }
+    return data;
+  }, [data, selectedTag, selectedMenu]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -85,16 +92,18 @@ const NotesList = ({ selectedTag = "" }) => {
 
   return (
     <div className="flex flex-col gap-4 md:p-4">
-      <Button
-        vatiant="primary"
-        className="hidden md:flex md:flex-row md:gap-2  md:visible"
-        onClick={() => setIsCreateNote(true)}
-      >
-        <IconPlus size={16} />
-        <span className="text-preset-4">Create New Note</span>
-      </Button>
+      {selectedMenu !== MENU_NAMES.ARCHIEVED_NOTES && (
+        <Button
+          vatiant="primary"
+          className="hidden md:flex md:flex-row md:gap-2  md:visible"
+          onClick={() => setIsCreateNote(true)}
+        >
+          <IconPlus size={16} />
+          <span className="text-preset-4">Create New Note</span>
+        </Button>
+      )}
       <div className="flex flex-col">
-        {data.map((note, index) => (
+        {displayData.map((note, index) => (
           <Fragment key={note?._id}>
             <Note key={note?._id} note={note} />
             {index !== data.length - 1 && <hr className="text-neutral-200" />}

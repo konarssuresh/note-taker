@@ -10,7 +10,8 @@ const TITLE_MAP = {
 };
 
 const Notes = () => {
-  const { selectedNote, isCreateNote, selectedMenu } = useNoteStore();
+  const { selectedNote, isCreateNote, selectedMenu, selectedTag } =
+    useNoteStore();
   return (
     <div className="flex flex-row h-full w-full">
       <div className="hidden md:flex ">
@@ -18,11 +19,19 @@ const Notes = () => {
       </div>
       <div className="flex-grow flex flex-col h-full px-4 border-l border-neutral-200">
         <section className="flex flex-row justify-between px-8 py-6 border-b border-neutral-200">
-          <h3 className="text-preset-1">{TITLE_MAP[selectedMenu]}</h3>
+          {selectedTag ? (
+            <h3 className="text-preset-1">
+              <span className="text-neutral-600">Notes Tagged: </span>
+              {selectedTag}
+            </h3>
+          ) : (
+            <h3 className="text-preset-1">{TITLE_MAP[selectedMenu]}</h3>
+          )}
         </section>
+
         <section className="flex flex-row flex-grow">
           <div className="md:w-72.5">
-            <NotesList />
+            <NotesList selectedTag={selectedTag} />
           </div>
           <div className="border-r border-l border-neutral-200 flex-grow">
             {(selectedNote || isCreateNote) && <NoteDetails />}
