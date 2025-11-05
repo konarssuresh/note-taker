@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
+import { API_BASE } from "../../../constants/constants";
 
 export const useNotesListQuery = ({ isArchieved } = {}) => {
   const queryData = useQuery({
     queryKey: ["notes", isArchieved ? "archived" : "active"],
     queryFn: async () => {
       const response = await fetch(
-        `http://localhost:8000/notes/${isArchieved ? "archieved" : "active"}`,
+        `${API_BASE}/notes/${isArchieved ? "archieved" : "active"}`,
         {
           method: "GET",
           credentials: "include",

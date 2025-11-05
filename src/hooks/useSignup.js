@@ -1,10 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
+import { API_BASE } from "../constants/constants";
 
 const useSignup = () => {
   const signupMutation = useMutation({
     mutationFn: async (data) => {
       const { firstName, lastName, emailId, password } = data;
-      const response = await fetch("http://localhost:8000/signup", {
+      const response = await fetch(`${API_BASE}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

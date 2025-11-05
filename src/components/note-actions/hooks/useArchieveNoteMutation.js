@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_BASE } from "../../../constants/constants";
 
 export const useArchiveNoteMutation = () => {
   const queryClient = useQueryClient();
   const archiveNoteMutation = useMutation({
     mutationFn: async ({ noteId, shouldArchieve }) => {
       const response = await fetch(
-        `http://localhost:8000/notes/${noteId}/${shouldArchieve ? "archieve" : "unarchieve"}`,
+        `${API_BASE}notes/${noteId}/${shouldArchieve ? "archieve" : "unarchieve"}`,
         {
           method: "POST",
           credentials: "include",

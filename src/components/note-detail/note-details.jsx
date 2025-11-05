@@ -23,7 +23,7 @@ const validateTags = (value) => {
 };
 
 const NoteActions = ({ saveNote, form = {}, note }) => {
-  const { setSelectedMenu } = useNoteStore();
+  const { setSelectedMenu, isCreateNote } = useNoteStore();
 
   const {
     formState: { errors, isDirty },
@@ -47,10 +47,9 @@ const NoteActions = ({ saveNote, form = {}, note }) => {
   };
 
   const handleBackClick = () => {
-    if (note.status === "archieved") {
+    if (note?.status === "archieved") {
       setSelectedMenu(MENU_NAMES.ARCHIEVED_NOTES);
-    }
-    if (note.status === "active") {
+    } else {
       setSelectedMenu(MENU_NAMES.ALL_NOTES);
     }
   };
@@ -64,17 +63,22 @@ const NoteActions = ({ saveNote, form = {}, note }) => {
         <span className="text-preset-5">Go Back</span>
       </button>
       <div className="flex flex-row gap-4 items-center">
-        <button onClick={handleDelete}>
-          <IconDelete size={18} />
-        </button>
-        <button onClick={handleArchieve}>
-          <IconArchive size={18} />
-        </button>
+        {!isCreateNote && (
+          <>
+            <button onClick={handleDelete}>
+              <IconDelete size={18} />
+            </button>
+            <button onClick={handleArchieve}>
+              <IconArchive size={18} />
+            </button>
+          </>
+        )}
+
         <button
           onClick={() => {
             saveNote(getValues());
           }}
-          disabled={isDirty && !isEmpty(errors)}
+          disabled={!isDirty || !isEmpty(errors)}
           className="text-preset-5 text-blue-500 cursor-pointer disabled:cursor-not-allowed"
         >
           Save

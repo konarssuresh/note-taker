@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_BASE } from "../../../constants/constants";
 
 export const useDeleteNoteMutation = () => {
   const queryClient = useQueryClient();
   const archiveNoteMutation = useMutation({
     mutationFn: async ({ noteId }) => {
-      const response = await fetch(`http://localhost:8000/notes/${noteId}`, {
+      const response = await fetch(`${API_BASE}/notes/${noteId}`, {
         method: "DELETE",
         credentials: "include",
       });
