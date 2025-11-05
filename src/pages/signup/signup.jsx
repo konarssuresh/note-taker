@@ -24,7 +24,7 @@ const Signup = () => {
   const { mutate: signupMutate, isPending } = useSignup();
   return (
     <div className="bg-neutral-200 w-[100vw] h-[100vh] flex justify-center items-center">
-      <div className="flex flex-col gap-4 shadow-lg rounded-lg p-4 bg-white justify-center items-center md:w-135 md:h-145">
+      <div className="flex flex-col gap-4 shadow-lg rounded-lg p-4 bg-white justify-center m-8 md:m-0 flex-grow md:flex-grow-0  items-center  md:w-135 md:h-145">
         <LogoIcon />
         <div className="flex flex-col gap-2 w-full">
           <h1 className="text-preset-1 text-neutral-950 text-center">

@@ -4,7 +4,7 @@ import { useNoteStore, MENU_NAMES } from "../../store/useNoteStore";
 import IconTag from "../../common-components/Icons/IconTag";
 import IconRight from "../../common-components/Icons/IconChevronRight";
 
-const NavItem = ({ label, icon, isSelected, onClick }) => {
+const NavItem = ({ label, icon, isSelected, onClick, isMobile = false }) => {
   const selectedClass = isSelected ? "bg-neutral-100" : "";
   const iconClass = isSelected ? "text-blue-500" : "text-neutral-950";
   return (
@@ -13,8 +13,14 @@ const NavItem = ({ label, icon, isSelected, onClick }) => {
       onClick={onClick}
     >
       <span className={iconClass}>{icon}</span>
-      <span className="text-preset-4 text-neutral-950 flex-grow">{label}</span>
-      {isSelected && <IconRight size={16} className="text-neutral-950" />}
+      {!isMobile && (
+        <span className="text-preset-4 text-neutral-950 flex-grow">
+          {label}
+        </span>
+      )}
+      {!isMobile && isSelected && (
+        <IconRight size={16} className="text-neutral-950" />
+      )}
     </div>
   );
 };

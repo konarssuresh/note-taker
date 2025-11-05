@@ -1,8 +1,15 @@
 import { useMemo } from "react";
 
-export const Button = ({ variant, children, className = "", ...remaining }) => {
-  const defaultClassNames =
-    "cursor-pointer text-preset-4 px-4 py-3 rounded-md focus:outline-2 focus:outline-offset-2 focus:outline-neutral-300 disabled:text-neutral-50 disabled:text-neutral-300 disabled:border-transparent disabled:cursor-not-allowed";
+export const Button = ({
+  variant,
+  children,
+  className = "",
+  isRounded = false,
+  ...remaining
+}) => {
+  const defaultClassNames = `cursor-pointer text-preset-4 px-4 py-3 focus:outline-2 focus:outline-offset-2 focus:outline-neutral-300 disabled:text-neutral-50 disabled:text-neutral-300 disabled:border-transparent disabled:cursor-not-allowed`;
+
+  const roundedClassNames = isRounded ? "rounded-full" : "rounded-md";
   const primaryClassNames =
     "bg-blue-700 hover:bg-blue-500 focus:bg-blue-500 text-neutral-0";
 
@@ -30,7 +37,7 @@ export const Button = ({ variant, children, className = "", ...remaining }) => {
   }, [variant]);
   return (
     <button
-      className={`${defaultClassNames} ${variantClass} ${className}`}
+      className={`${defaultClassNames} ${variantClass} ${roundedClassNames} ${className}`}
       {...remaining}
     >
       {children}

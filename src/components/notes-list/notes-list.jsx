@@ -91,7 +91,7 @@ const NotesList = ({ selectedTag = "" }) => {
   console.log("selectedTag:", selectedTag);
 
   return (
-    <div className="flex flex-col gap-4 md:p-4">
+    <div className="flex flex-col gap-4 px-4 py-5 md:p-4">
       {selectedMenu !== MENU_NAMES.ARCHIEVED_NOTES && (
         <Button
           vatiant="primary"
@@ -102,6 +102,13 @@ const NotesList = ({ selectedTag = "" }) => {
           <span className="text-preset-4">Create New Note</span>
         </Button>
       )}
+      <div className="flex flex-row">
+        <span className="text-preset-1">
+          {selectedMenu === MENU_NAMES.ALL_NOTES && !selectedTag && "All Notes"}
+          {selectedMenu === MENU_NAMES.ARCHIEVED_NOTES && "Archived Notes"}
+        </span>
+      </div>
+
       <div className="flex flex-col">
         {displayData.map((note, index) => (
           <Fragment key={note?._id}>
@@ -110,6 +117,14 @@ const NotesList = ({ selectedTag = "" }) => {
           </Fragment>
         ))}
       </div>
+      <Button
+        variant="primary"
+        isRounded
+        className="w-14 h-14 md:hidden fixed bottom-20 right-5 rounded-full"
+        onClick={() => setIsCreateNote(true)}
+      >
+        <IconPlus size={24} />
+      </Button>
     </div>
   );
 };
