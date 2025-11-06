@@ -171,6 +171,19 @@ const Signup = () => {
             Signup
           </Button>
         </div>
+        <div className="flex flex-row gap-2 items-center">
+          <span className="text-neutral-600 text-preset-5">
+            Already have an account?
+          </span>
+          <button
+            className="text-neutral-950 text-preset-5 cursor-pointer"
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
+            Login
+          </button>
+        </div>
       </div>
     </div>
   );
