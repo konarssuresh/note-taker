@@ -6,6 +6,7 @@ import NavMenu from "../../components/nav-menu/nav-menu.jsx";
 import MobileNav from "../../components/nav-menu/mobile-nav.jsx";
 import { useNoteStore, MENU_NAMES } from "../../store/useNoteStore";
 import LogoIcon from "../../common-components/Icons/LogoIcon.jsx";
+import { DialogContainer } from "../../common-components/dialog-container.jsx";
 
 const TITLE_MAP = {
   [MENU_NAMES.ALL_NOTES]: "All Notes",
@@ -62,6 +63,7 @@ const Notes = () => {
           <MobileNav />
         </div>
       </div>
+      <DialogContainer />
     </Fragment>
   );
 };

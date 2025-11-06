@@ -96,8 +96,6 @@ const NotesList = ({ selectedTag = "" }) => {
     );
   }
 
-  console.log("selectedTag:", selectedTag);
-
   return (
     <div className="flex flex-col gap-4 px-4 py-5 md:p-4">
       {selectedMenu !== MENU_NAMES.ARCHIEVED_NOTES && (

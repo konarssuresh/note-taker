@@ -3,6 +3,7 @@ import { API_BASE } from "../constants/constants";
 
 const useLogin = () => {
   const loginMutation = useMutation({
+    mutationKey: ["login"],
     mutationFn: async (data) => {
       const { emailId, password } = data;
       const response = await fetch(`${API_BASE}/login`, {
@@ -17,11 +18,10 @@ const useLogin = () => {
         }),
       });
       if (!response.ok) {
-        localStorage.removeItem("isAuthenticated");
         throw new Error("Login failed");
       }
       localStorage.setItem("isAuthenticated", "true");
-      return response.json();
+      return true;
     },
   });
 

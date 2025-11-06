@@ -1,4 +1,6 @@
 import { useForm, Controller } from "react-hook-form";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 import validator from "validator";
 import isEmpty from "lodash/isEmpty";
 
@@ -8,6 +10,7 @@ import { TextField } from "../../common-components/text-field";
 import { Button } from "../../common-components/button";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const {
     control,
     formState: { isDirty, errors },
@@ -22,6 +25,12 @@ const Signup = () => {
     mode: "onBlur",
   });
   const { mutate: signupMutate, isPending } = useSignup();
+
+  useEffect(() => {
+    if (localStorage.getItem("isAuthenticated") === "true") {
+      navigate("/notes");
+    }
+  }, [navigate]);
   return (
     <div className="bg-neutral-200 w-[100vw] h-[100vh] flex justify-center items-center">
       <div className="flex flex-col gap-4 shadow-lg rounded-lg p-4 bg-white justify-center m-8 md:m-0 flex-grow md:flex-grow-0  items-center  md:w-135 md:h-145">
@@ -152,7 +161,11 @@ const Signup = () => {
             variant="primary"
             className="w-full mt-2"
             onClick={() => {
-              signupMutate(getValues());
+              signupMutate(getValues(), {
+                onSuccess: () => {
+                  navigate("/login");
+                },
+              });
             }}
           >
             Signup

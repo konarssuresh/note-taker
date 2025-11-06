@@ -20,7 +20,7 @@ const useSignup = () => {
       if (!response.ok) {
         throw new Error("Signup failed");
       }
-      return response.json();
+      return true;
     },
   });
 

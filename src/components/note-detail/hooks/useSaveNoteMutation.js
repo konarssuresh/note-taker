@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
 import { useNoteStore } from "../../../store/useNoteStore";
 import { API_BASE } from "../../../constants/constants";
 
 export const useSaveNoteMutation = () => {
+  const navigate = useNavigate();
   const { setSelectedNote } = useNoteStore();
   const queryClient = useQueryClient();
   const saveNoteMutation = useMutation({
@@ -21,6 +23,10 @@ export const useSaveNoteMutation = () => {
         }),
       });
       if (!response.ok) {
+        if (response.status === 403) {
+          localStorage.removeItem("isAuthenticated");
+          navigate("/login");
+        }
         throw new Error("Save note failed");
       }
       return response.json();
