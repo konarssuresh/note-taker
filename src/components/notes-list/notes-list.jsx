@@ -84,6 +84,14 @@ const NotesList = ({ selectedTag = "" }) => {
           You don’t have any notes yet. Start a new note to capture your
           thoughts and ideas.
         </div>
+        <Button
+          variant="primary"
+          isRounded
+          className="w-14 h-14 md:hidden flex items-center fixed bottom-20 right-5 rounded-full"
+          onClick={() => setIsCreateNote(true)}
+        >
+          <IconPlus size={24} />
+        </Button>
       </div>
     );
   }
@@ -116,15 +124,15 @@ const NotesList = ({ selectedTag = "" }) => {
             {index !== data.length - 1 && <hr className="text-neutral-200" />}
           </Fragment>
         ))}
+        <Button
+          variant="primary"
+          isRounded
+          className="w-14 h-14 md:hidden flex fixed bottom-20 right-5 rounded-full"
+          onClick={() => setIsCreateNote(true)}
+        >
+          <IconPlus size={24} />
+        </Button>
       </div>
-      <Button
-        variant="primary"
-        isRounded
-        className="w-14 h-14 md:hidden fixed bottom-20 right-5 rounded-full"
-        onClick={() => setIsCreateNote(true)}
-      >
-        <IconPlus size={24} />
-      </Button>
     </div>
   );
 };
