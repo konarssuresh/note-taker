@@ -147,7 +147,7 @@ const NotesList = ({ selectedTag = "" }) => {
         <Button
           variant="primary"
           isRounded
-          className="w-14 h-14 md:hidden flex fixed bottom-20 right-5 rounded-full"
+          className="w-14 h-14 md:hidden flex items-center fixed bottom-20 right-5 rounded-full"
           onClick={() => setIsCreateNote(true)}
         >
           <IconPlus size={24} />
