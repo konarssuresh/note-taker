@@ -1,21 +1,34 @@
 import { Fragment } from "react";
 import NotesList from "../../components/notes-list/notes-list.jsx";
+import { Tags } from "../../components/nav-menu/tags.jsx";
 import NoteDetails from "../../components/note-detail/note-details.jsx";
 import NoteActions from "../../components/note-actions/note-actions.jsx";
 import NavMenu from "../../components/nav-menu/nav-menu.jsx";
 import MobileNav from "../../components/nav-menu/mobile-nav.jsx";
+import Settings from "../../components/settings/settings.jsx";
 import { useNoteStore, MENU_NAMES } from "../../store/useNoteStore";
 import LogoIcon from "../../common-components/Icons/LogoIcon.jsx";
+import IconSettings from "../../common-components/Icons/IconSettings.jsx";
 import { DialogContainer } from "../../common-components/dialog-container.jsx";
 
 const TITLE_MAP = {
   [MENU_NAMES.ALL_NOTES]: "All Notes",
   [MENU_NAMES.ARCHIEVED_NOTES]: "Archived Notes",
+  [MENU_NAMES.SETTINGS]: "Settings",
 };
 
 const Notes = () => {
-  const { selectedNote, isCreateNote, selectedMenu, selectedTag } =
-    useNoteStore();
+  const {
+    selectedNote,
+    isCreateNote,
+    selectedMenu,
+    selectedTag,
+    setSelectedMenu,
+  } = useNoteStore();
+
+  const handleSettingsClick = () => {
+    setSelectedMenu(MENU_NAMES.SETTINGS);
+  };
   return (
     <Fragment>
       <div className="hidden md:flex flex-row h-full w-full">
@@ -32,19 +45,27 @@ const Notes = () => {
             ) : (
               <h3 className="text-preset-1">{TITLE_MAP[selectedMenu]}</h3>
             )}
-          </section>
-
-          <section className="flex flex-row flex-grow">
-            <div className="md:w-72.5">
-              <NotesList selectedTag={selectedTag} />
-            </div>
-            <div className="border-r border-l border-neutral-200 flex-grow">
-              {(selectedNote || isCreateNote) && <NoteDetails />}
-            </div>
-            <div className="md:w-60">
-              <NoteActions />
+            <div className="flex flex-row gap-2">
+              <button className="cursor-pointer" onClick={handleSettingsClick}>
+                <IconSettings />
+              </button>
             </div>
           </section>
+          {[MENU_NAMES.SETTINGS].includes(selectedMenu) ? (
+            <Settings />
+          ) : (
+            <section className="flex flex-row flex-grow">
+              <div className="md:w-72.5">
+                <NotesList selectedTag={selectedTag} />
+              </div>
+              <div className="border-r border-l border-neutral-200 flex-grow">
+                {(selectedNote || isCreateNote) && <NoteDetails />}
+              </div>
+              <div className="md:w-60">
+                <NoteActions />
+              </div>
+            </section>
+          )}
         </div>
       </div>
       <div className="w-full h-full flex flex-col md:hidden">
@@ -56,7 +77,14 @@ const Notes = () => {
             !isCreateNote &&
             [MENU_NAMES.ALL_NOTES, MENU_NAMES.ARCHIEVED_NOTES].includes(
               selectedMenu
-            ) && <NotesList />}
+            ) && <NotesList selectedTag={selectedTag} />}
+          {!selectedNote &&
+            !isCreateNote &&
+            [MENU_NAMES.TAGS].includes(selectedMenu) && <Tags />}
+          {!selectedNote &&
+            !isCreateNote &&
+            [MENU_NAMES.SETTINGS].includes(selectedMenu) && <Settings />}
+
           {(selectedNote || isCreateNote) && <NoteDetails />}
         </div>
         <div className="fixed bottom-0 w-full z-10 bg-white">

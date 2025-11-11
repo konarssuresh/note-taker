@@ -4,6 +4,7 @@ import { useNotesListQuery } from "./hooks/useNotesList";
 import { useNoteStore, MENU_NAMES } from "../../store/useNoteStore";
 import { Button } from "../../common-components/button";
 import IconPlus from "../../common-components/Icons/IconPlus";
+import IconArrowLeft from "../../common-components/Icons/IconArrowLeft";
 
 const Note = ({ note = {} }) => {
   const { setSelectedNote, selectedNote } = useNoteStore();
@@ -41,7 +42,8 @@ const Note = ({ note = {} }) => {
 };
 
 const NotesList = ({ selectedTag = "" }) => {
-  const { setIsCreateNote, selectedMenu } = useNoteStore();
+  const { setIsCreateNote, selectedMenu, setSelectedMenu, setSelectedTag } =
+    useNoteStore();
   const {
     data = [],
     isLoading,
@@ -56,6 +58,11 @@ const NotesList = ({ selectedTag = "" }) => {
     }
     return data;
   }, [data, selectedTag, selectedMenu]);
+
+  const handleBackClick = () => {
+    setSelectedMenu(MENU_NAMES.TAGS);
+    setSelectedTag(null);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -108,9 +115,24 @@ const NotesList = ({ selectedTag = "" }) => {
           <span className="text-preset-4">Create New Note</span>
         </Button>
       )}
+      {selectedTag && (
+        <button
+          className="flex flex-row gap-1 items-center"
+          onClick={handleBackClick}
+        >
+          <IconArrowLeft size={18} />
+          <span className="text-preset-5">Go Back</span>
+        </button>
+      )}
       <div className="flex flex-row">
         <span className="text-preset-1">
           {selectedMenu === MENU_NAMES.ALL_NOTES && !selectedTag && "All Notes"}
+          {selectedTag && (
+            <div className="flex flex-row gap-2">
+              <span className="text-neutral-600">Notes Tagged:</span>
+              <span>{selectedTag}</span>
+            </div>
+          )}
           {selectedMenu === MENU_NAMES.ARCHIEVED_NOTES && "Archived Notes"}
         </span>
       </div>

@@ -3,7 +3,7 @@ import IconHome from "../../common-components/Icons/IconHome";
 import IconSearch from "../../common-components/Icons/IconSearch";
 import IconArchive from "../../common-components/Icons/IconArchive";
 import IconTag from "../../common-components/Icons/IconTag";
-import IconSettings from "../../common-components/Icons/IconSearch";
+import IconSettings from "../../common-components/Icons/IconSettings";
 import { NavItem } from "./tags";
 
 const MobileNav = () => {
@@ -27,8 +27,22 @@ const MobileNav = () => {
           setSelectedMenu(MENU_NAMES.ARCHIEVED_NOTES);
         }}
       />
-      <NavItem isMobile icon={<IconTag />} isSelected={selectedTag} />
-      <NavItem isMobile icon={<IconSettings />} />
+      <NavItem
+        isMobile
+        icon={<IconTag />}
+        isSelected={selectedMenu === MENU_NAMES.TAGS || selectedTag}
+        onClick={() => {
+          setSelectedMenu(MENU_NAMES.TAGS);
+        }}
+      />
+      <NavItem
+        isMobile
+        icon={<IconSettings />}
+        isSelected={selectedMenu === MENU_NAMES.SETTINGS}
+        onClick={() => {
+          setSelectedMenu(MENU_NAMES.SETTINGS);
+        }}
+      />
     </div>
   );
 };
