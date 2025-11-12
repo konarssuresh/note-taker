@@ -25,7 +25,7 @@ export const TextField = ({
       <div className="relative">
         {startIcon && (
           <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500">
-            {endIcon}
+            {startIcon}
           </div>
         )}
         <input className={inputClass} {...inputProps} />

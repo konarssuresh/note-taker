@@ -1,10 +1,14 @@
 import { Fragment, useMemo } from "react";
 import dayjs from "dayjs";
+import toLower from "lodash/toLower";
+import some from "lodash/some";
 import { useNotesListQuery } from "./hooks/useNotesList";
 import { useNoteStore, MENU_NAMES } from "../../store/useNoteStore";
 import { Button } from "../../common-components/button";
 import IconPlus from "../../common-components/Icons/IconPlus";
 import IconArrowLeft from "../../common-components/Icons/IconArrowLeft";
+import IconSearch from "../../common-components/Icons/IconSearch";
+import { TextField } from "../../common-components/text-field";
 
 const Note = ({ note = {} }) => {
   const { setSelectedNote, selectedNote } = useNoteStore();
@@ -41,9 +45,15 @@ const Note = ({ note = {} }) => {
   );
 };
 
-const NotesList = ({ selectedTag = "" }) => {
-  const { setIsCreateNote, selectedMenu, setSelectedMenu, setSelectedTag } =
-    useNoteStore();
+const NotesList = ({ selectedTag = "", isSearch }) => {
+  const {
+    setIsCreateNote,
+    selectedMenu,
+    setSelectedMenu,
+    setSelectedTag,
+    searchText: searchTextCaseSensitive,
+    setSearchText,
+  } = useNoteStore();
   const {
     data = [],
     isLoading,
@@ -52,12 +62,32 @@ const NotesList = ({ selectedTag = "" }) => {
     isArchieved: selectedMenu === MENU_NAMES.ARCHIEVED_NOTES,
   });
 
+  const searchText = toLower(searchTextCaseSensitive);
+
   const displayData = useMemo(() => {
+    let filteredData = data;
     if (selectedTag && selectedMenu === MENU_NAMES.ALL_NOTES) {
-      return data.filter((note) => note.tags.includes(selectedTag));
+      filteredData = filteredData.filter((note) =>
+        note.tags.includes(selectedTag)
+      );
     }
-    return data;
-  }, [data, selectedTag, selectedMenu]);
+
+    if (searchText) {
+      filteredData = filteredData.filter((note) => {
+        if (toLower(note.content).includes(searchText)) {
+          return true;
+        }
+        if (toLower(note.title).includes(searchText)) {
+          return true;
+        }
+        if (some(note.tags, (tag) => toLower(tag).includes(searchText))) {
+          return true;
+        }
+        return false;
+      });
+    }
+    return filteredData;
+  }, [data, selectedTag, selectedMenu, searchText]);
 
   const handleBackClick = () => {
     setSelectedMenu(MENU_NAMES.TAGS);
@@ -125,17 +155,45 @@ const NotesList = ({ selectedTag = "" }) => {
         </button>
       )}
       <div className="flex flex-row">
-        <span className="text-preset-1">
-          {selectedMenu === MENU_NAMES.ALL_NOTES && !selectedTag && "All Notes"}
-          {selectedTag && (
-            <div className="flex flex-row gap-2">
-              <span className="text-neutral-600">Notes Tagged:</span>
-              <span>{selectedTag}</span>
-            </div>
-          )}
-          {selectedMenu === MENU_NAMES.ARCHIEVED_NOTES && "Archived Notes"}
-        </span>
+        {isSearch ? (
+          <span className="text-preset-1 h-7">Search</span>
+        ) : (
+          <span className="text-preset-1">
+            {selectedMenu === MENU_NAMES.ALL_NOTES &&
+              !selectedTag &&
+              "All Notes"}
+            {selectedTag && (
+              <div className="flex flex-row gap-2">
+                <span className="text-neutral-600">Notes Tagged:</span>
+                <span>{selectedTag}</span>
+              </div>
+            )}
+            {selectedMenu === MENU_NAMES.ARCHIEVED_NOTES && "Archived Notes"}
+          </span>
+        )}
       </div>
+
+      {isSearch && (
+        <>
+          <div className="w-full">
+            <TextField
+              //className="w-75 h-11"
+              startIcon={<IconSearch />}
+              value={searchText}
+              onChange={(e) => {
+                setSearchText(e.target.value);
+              }}
+              placeholder="Search by title, content or tags"
+            />
+          </div>
+          {searchText && (
+            <span className="text-preset-5 text-neutral-600">
+              All notes matching ”{searchTextCaseSensitive}” are displayed
+              below.
+            </span>
+          )}
+        </>
+      )}
 
       <div className="flex flex-col">
         {displayData.map((note, index) => (

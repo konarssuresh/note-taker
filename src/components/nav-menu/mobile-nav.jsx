@@ -18,7 +18,14 @@ const MobileNav = () => {
           setSelectedMenu(MENU_NAMES.ALL_NOTES);
         }}
       />
-      <NavItem isMobile icon={<IconSearch />} />
+      <NavItem
+        isMobile
+        icon={<IconSearch />}
+        isSelected={selectedMenu === MENU_NAMES.SEARCH}
+        onClick={() => {
+          setSelectedMenu(MENU_NAMES.SEARCH);
+        }}
+      />
       <NavItem
         isMobile
         icon={<IconArchive />}

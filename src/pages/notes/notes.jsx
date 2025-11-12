@@ -6,9 +6,11 @@ import NoteActions from "../../components/note-actions/note-actions.jsx";
 import NavMenu from "../../components/nav-menu/nav-menu.jsx";
 import MobileNav from "../../components/nav-menu/mobile-nav.jsx";
 import Settings from "../../components/settings/settings.jsx";
+import { TextField } from "../../common-components/text-field.jsx";
 import { useNoteStore, MENU_NAMES } from "../../store/useNoteStore";
 import LogoIcon from "../../common-components/Icons/LogoIcon.jsx";
 import IconSettings from "../../common-components/Icons/IconSettings.jsx";
+import IconSearch from "../../common-components/Icons/IconSearch.jsx";
 import { DialogContainer } from "../../common-components/dialog-container.jsx";
 
 const TITLE_MAP = {
@@ -19,15 +21,39 @@ const TITLE_MAP = {
 
 const Notes = () => {
   const {
+    searchText,
     selectedNote,
     isCreateNote,
     selectedMenu,
     selectedTag,
     setSelectedMenu,
+    setSearchText,
   } = useNoteStore();
 
   const handleSettingsClick = () => {
     setSelectedMenu(MENU_NAMES.SETTINGS);
+  };
+
+  const getTitle = () => {
+    if (selectedTag) {
+      return (
+        <h3 className="text-preset-1">
+          <span className="text-neutral-600">Notes Tagged: </span>
+          {selectedTag}
+        </h3>
+      );
+    }
+
+    if (searchText) {
+      return (
+        <h3 className="text-preset-1">
+          <span className="text-neutral-600">Showing results for: </span>
+          {searchText}
+        </h3>
+      );
+    }
+
+    return <h3 className="text-preset-1">{TITLE_MAP[selectedMenu]}</h3>;
   };
   return (
     <Fragment>
@@ -37,15 +63,19 @@ const Notes = () => {
         </div>
         <div className="hidden md:flex flex-grow flex-col h-full px-4 border-l border-neutral-200">
           <section className="flex flex-row justify-between px-8 py-6 border-b border-neutral-200">
-            {selectedTag ? (
-              <h3 className="text-preset-1">
-                <span className="text-neutral-600">Notes Tagged: </span>
-                {selectedTag}
-              </h3>
-            ) : (
-              <h3 className="text-preset-1">{TITLE_MAP[selectedMenu]}</h3>
-            )}
-            <div className="flex flex-row gap-2">
+            {getTitle()}
+            <div className="flex flex-row gap-2 items-center">
+              <div className="w-75 h-11">
+                <TextField
+                  //className="w-75 h-11"
+                  startIcon={<IconSearch />}
+                  value={searchText}
+                  onChange={(e) => {
+                    setSearchText(e.target.value);
+                  }}
+                  placeholder="Search by title, content or tags"
+                />
+              </div>
               <button className="cursor-pointer" onClick={handleSettingsClick}>
                 <IconSettings />
               </button>
@@ -84,6 +114,11 @@ const Notes = () => {
           {!selectedNote &&
             !isCreateNote &&
             [MENU_NAMES.SETTINGS].includes(selectedMenu) && <Settings />}
+          {!selectedNote &&
+            !isCreateNote &&
+            [MENU_NAMES.SEARCH].includes(selectedMenu) && (
+              <NotesList isSearch />
+            )}
 
           {(selectedNote || isCreateNote) && <NoteDetails />}
         </div>

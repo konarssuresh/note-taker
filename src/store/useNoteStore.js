@@ -5,6 +5,7 @@ export const MENU_NAMES = {
   ARCHIEVED_NOTES: "archieved-notes",
   TAGS: "tags",
   SETTINGS: "settings",
+  SEARCH: "search",
 };
 export const useNoteStore = create((set) => ({
   selectedNote: null,
@@ -13,9 +14,16 @@ export const useNoteStore = create((set) => ({
   setIsCreateNote: (value) => set({ selectedNote: null, isCreateNote: value }),
   selectedMenu: MENU_NAMES.ALL_NOTES,
   setSelectedMenu: (menuName) =>
-    set({ selectedNote: null, isCreateNote: false, selectedMenu: menuName }),
+    set({
+      selectedNote: null,
+      isCreateNote: false,
+      selectedMenu: menuName,
+      searchText: "",
+    }),
   selectedTag: null,
-  setSelectedTag: (tag) => set({ selectedTag: tag }),
+  setSelectedTag: (tag) => set({ selectedTag: tag, searchText: "" }),
+  searchText: "",
+  setSearchText: (value) => set({ searchText: value || "" }),
   reset: () =>
     set({
       selectedNote: null,
