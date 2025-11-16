@@ -150,7 +150,7 @@ const Login = () => {
           <button
             className="text-neutral-950 text-preset-5 cursor-pointer"
             onClick={() => {
-              navigate("/notes");
+              navigate("/signup");
             }}
           >
             Sign Up
