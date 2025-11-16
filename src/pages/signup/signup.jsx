@@ -1,16 +1,20 @@
 import { useForm, Controller } from "react-hook-form";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+
 import { GoogleLogin } from "@react-oauth/google";
 import validator from "validator";
 import isEmpty from "lodash/isEmpty";
 
-import { useSignup } from "../../hooks/useSignup";
+import { useSignup, useSignupWithGoogle } from "../../hooks/useSignup";
 import LogoIcon from "../../common-components/Icons/LogoIcon";
+import IconGoogle from "../../common-components/Icons/IconGoogle";
 import { TextField } from "../../common-components/text-field";
 import { Button } from "../../common-components/button";
 
 const Signup = () => {
+  const { mutate: signupWithGoogle } = useSignupWithGoogle();
+
   const navigate = useNavigate();
   const {
     control,
@@ -171,6 +175,24 @@ const Signup = () => {
           >
             Signup
           </Button>
+
+          <GoogleLogin
+            className="w-full"
+            onSuccess={(data) => {
+              const { credential } = data;
+              signupWithGoogle(
+                { credential },
+                {
+                  onSuccess: () => {
+                    navigate("/login");
+                  },
+                }
+              );
+            }}
+            onError={(err) => {
+              console.log("error google login-" + err);
+            }}
+          />
         </div>
         <div className="flex flex-row gap-2 items-center">
           <span className="text-neutral-600 text-preset-5">

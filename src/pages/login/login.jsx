@@ -126,7 +126,6 @@ const Login = () => {
           <GoogleLogin
             onSuccess={(credentialResponse) => {
               const { credential } = credentialResponse;
-
               loginWithGoogle(
                 {
                   credential,

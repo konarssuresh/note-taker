@@ -27,4 +27,30 @@ const useSignup = () => {
   return signupMutation;
 };
 
-export { useSignup };
+const useSignupWithGoogle = () => {
+  const loginMutation = useMutation({
+    mutationKey: ["signup-with-google"],
+    mutationFn: async (data) => {
+      const { credential } = data;
+      const response = await fetch(`${API_BASE}/google/signup`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          credential,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
+
+      return true;
+    },
+  });
+
+  return loginMutation;
+};
+
+export { useSignup, useSignupWithGoogle };
