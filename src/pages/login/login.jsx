@@ -1,10 +1,11 @@
 import { useForm, Controller } from "react-hook-form";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import { GoogleLogin } from "@react-oauth/google";
 import isEmpty from "lodash/isEmpty";
 import validator from "validator";
 
-import { useLogin } from "../../hooks/useLogin";
+import { useLogin, useLoginWithGoogle } from "../../hooks/useLogin";
 
 import LogoIcon from "../../common-components/Icons/LogoIcon";
 import { Button } from "../../common-components/button";
@@ -31,6 +32,7 @@ const Login = () => {
   }, [navigate]);
 
   const { mutate: loginMutate, isPending } = useLogin();
+  const { mutate: loginWithGoogle } = useLoginWithGoogle();
   return (
     <div className="bg-neutral-200 w-[100vw] h-[100vh] flex justify-center items-center">
       <div className="flex flex-col gap-4 shadow-lg rounded-lg p-4 bg-white justify-center items-center m-8 md:m-0 flex-grow md:flex-grow-0 md:w-135 md:h-115">
@@ -120,6 +122,26 @@ const Login = () => {
           >
             Login
           </Button>
+
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              const { credential } = credentialResponse;
+
+              loginWithGoogle(
+                {
+                  credential,
+                },
+                {
+                  onSuccess: () => {
+                    navigate("/notes");
+                  },
+                }
+              );
+            }}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          />
         </div>
 
         <div className="flex flex-row gap-2 items-center">
